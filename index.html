@@ -15,7 +15,7 @@
 </head>
 <body class="bg-gray-900">
 <div id="app-container">
-
+  <!-- 开发者介绍部分 -->
   <section class="w-screen h-screen flex items-center justify-center bg-blue-600 bg-[url('./images/developer_bg.png')] bg-cover bg-no-repeat text-white" id="developer">
     <div class="text-center max-w-2xl px-8">
       <div class="bg-white bg-opacity-20 p-6 rounded-full inline-block mb-8">
@@ -35,7 +35,7 @@
   </section>
 </div>
 
-
+<!-- 页脚 -->
 <footer class="fixed bottom-0 left-0 w-full bg-black bg-opacity-80 text-white p-5 text-center translate-y-full transition-transform duration-300 z-50" id="developer-footer">
   <div class="max-w-4xl mx-auto">
     <div class="flex items-center justify-center mb-4">
@@ -52,10 +52,11 @@
   </div>
 </footer>
 
-
+<!-- 滚动指示器 -->
 <div class="fixed right-[30px] top-1/2 -translate-y-1/2 z-100" id="scroll-indicator"></div>
 
 <script>
+    // 应用数据数组
     const apps = [
         {
             name: "Security Mate",
@@ -79,11 +80,12 @@
         },
     ];
 
-
+    // 获取容器元素
     const container = document.getElementById('app-container');
     const indicator = document.getElementById('scroll-indicator');
     const footer = document.getElementById('developer-footer');
 
+    // 首先生成开发者区块的指示点
     const devDot = document.createElement('div');
     devDot.className = 'w-3 h-3 rounded-full bg-gray-400 my-2.5 cursor-pointer transition-all duration-300 bg-opacity-30 hover:bg-opacity-100 dot-active';
     devDot.dataset.target = 'developer';
@@ -94,13 +96,15 @@
     });
     indicator.appendChild(devDot);
 
+    // 生成应用区块和滚动指示器
     apps.forEach((app, index) => {
+        // 创建应用区块
         const section = document.createElement('section');
-        section.className = `w-screen h-screen relative flex flex-col md:flex-row ${index % 2 === 0 ? '' : 'md:[&>.content-half]:order-2'}`;
+        section.className = `w-screen  md:h-screen relative flex flex-col md:flex-row ${index % 2 === 0 ? '' : 'md:[&>.content-half]:order-2'}`;
         section.id = `app-${index}`;
 
         section.innerHTML = `
-            <div class="content-half w-full md:w-1/2 h-full flex items-center justify-center ${app.bgColor} ${app.textColor}">
+            <div class="content-half w-full md:w-1/2 h-screen flex items-center justify-center ${app.bgColor} ${app.textColor}">
                 <div class="max-w-md px-8 py-12 md:px-12">
                     <div class="bg-white bg-opacity-20 p-2 rounded-xl inline-block mb-6">
                         <img src="${app.icon}" alt="${app.name}" class="w-[100px] h-[100px]">
@@ -112,11 +116,13 @@
                     </a>
                 </div>
             </div>
-            <div class="screenshot-half w-full md:w-1/2 h-full flex items-center justify-center bg-red-100 relative">
+            <div class="screenshot-half w-full md:w-1/2 h-screen flex items-center justify-center bg-red-100 relative">
                 <div class="w-[80%] max-w-[400px] h-[500px] relative">
+                    <!-- 第一张截图 - 向右倾斜 -->
                     <img src="${app.screenshot1}" alt="${app.name}"
                          class="absolute w-full rounded-2xl shadow-2xl transition-all duration-500 hover:-rotate-y-[5deg] hover:rotate-z-[2deg] hover:-translate-y-[10px]"
                          style="transform: rotateY(-15deg) rotateZ(5deg); top: 0; left: 0; z-index: 20;">
+                    <!-- 第二张截图 - 向左倾斜 -->
                     <img src="${app.screenshot2}" alt="${app.name}"
                          class="absolute w-full rounded-2xl shadow-2xl opacity-90 transition-all duration-500 hover:rotate-y-[5deg] hover:-rotate-z-[1deg] hover:translate-y-[10px]"
                          style="transform: rotateY(10deg) rotateZ(-3deg); top: 40px; left: 20px; z-index: 10;">
@@ -126,6 +132,7 @@
 
         container.appendChild(section);
 
+        // 创建滚动指示点
         const dot = document.createElement('div');
         dot.className = 'w-3 h-3 rounded-full bg-gray-400 my-2.5 cursor-pointer transition-all duration-300 bg-opacity-30 hover:bg-opacity-100';
         dot.dataset.target = `app-${index}`;
@@ -137,14 +144,17 @@
         indicator.appendChild(dot);
     });
 
+    // 滚动时更新指示器状态和显示底部信息
     window.addEventListener('scroll', () => {
         const sections = document.querySelectorAll('section');
         const dots = document.querySelectorAll('#scroll-indicator > div');
 
+        // 检查是否滚动到底部
         const isAtBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
         footer.classList.toggle('translate-y-0', isAtBottom);
         footer.classList.toggle('translate-y-full', !isAtBottom);
 
+        // 更新指示点状态
         sections.forEach((section, index) => {
             const rect = section.getBoundingClientRect();
             if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
@@ -154,6 +164,7 @@
         });
     });
 
+    // 初始加载时检查是否已经在底部
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
         footer.classList.add('translate-y-0');
         footer.classList.remove('translate-y-full');
